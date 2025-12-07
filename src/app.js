@@ -1,5 +1,6 @@
 // import local modules
 import { envConfig } from './utils/env.js';
+import { healthCheckRouter } from './api/routers.api.js';
 
 // import external modules
 import express from 'express';
@@ -31,6 +32,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // middleware for serving static files
 app.use(express.static('public'));
+
+// middlewares for handling API routes
+app.use('/api/v1/healthcheck', healthCheckRouter);
 
 // export app
 export default app;
