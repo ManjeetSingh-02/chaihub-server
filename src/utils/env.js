@@ -5,6 +5,7 @@ import { z } from 'zod';
 export const envConfig = {
   ORIGIN_URL: String(process.env.ORIGIN_URL),
   PORT: Number(process.env.PORT),
+  MONGODB_URI: String(process.env.MONGODB_URI),
   NODE_ENV: String(process.env.NODE_ENV),
 };
 
@@ -12,6 +13,7 @@ export const envConfig = {
 export const envSchema = z.object({
   ORIGIN_URL: z.url({ message: 'ORIGIN_URL must be a valid URL' }),
   PORT: z.number().int().positive(),
+  MONGODB_URI: z.url({ message: 'MONGO_URI must be a valid MongoDB URI' }),
   NODE_ENV: z.enum(['development', 'testing', 'production']),
 });
 
