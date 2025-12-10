@@ -1,11 +1,10 @@
 // class to standardize API Errors
 export class APIError extends Error {
-  constructor(statusCode, message = 'Something went wrong', errors = [], stack = '') {
-    super(message);
+  constructor(statusCode, response = { message: 'Failed', errors: null }, stack = null) {
+    super(response.message);
     this.success = false;
     this.statusCode = statusCode;
-    this.message = message;
-    this.errors = errors;
+    this.response = response;
     // if stack is present, use it, else capture the stack trace
     if (stack) this.stack = stack;
     else Error.captureStackTrace(this, this.constructor);
