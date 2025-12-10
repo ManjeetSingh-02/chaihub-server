@@ -43,11 +43,11 @@ cohort {
     id
     createdAt
     updatedAt
-    name String
-    description String
+    cohortName String
+    cohortDescription String
     createdBy user_id
-    students [user_ids]
-    groups [group_ids]
+    allowedUsers [user_ids]
+    associatedGroups [group_ids]
     auditLogs [auditLog_ids]
 }
 
