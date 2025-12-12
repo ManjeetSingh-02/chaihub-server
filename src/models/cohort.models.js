@@ -25,19 +25,36 @@ const cohortSchema = new mongoose.Schema(
       required: true,
     },
     allowedUsers: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+      ],
       default: [],
     },
     associatedGroups: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' }],
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Group',
+        },
+      ],
       default: [],
     },
     auditLogs: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'AuditLog' }],
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'AuditLog',
+        },
+      ],
       default: [],
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 // export cohort model
