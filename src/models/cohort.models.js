@@ -53,4 +53,4 @@ const cohortSchema = new mongoose.Schema(
 );
 
 // export cohort model
-export const Cohort = mongoose.model('Cohort', cohortSchema);
+export default mongoose.model('Cohort', cohortSchema);
