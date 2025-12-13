@@ -16,7 +16,7 @@ export const envConfig = {
 };
 
 // zod schema for environment variables
-export const envSchema = z.object({
+const envSchema = z.object({
   ORIGIN_URL: z.url({ message: 'ORIGIN_URL must be a valid URL' }),
   PORT: z.number().int().positive(),
   MONGODB_URI: z.url({ message: 'MONGO_URI must be a valid MongoDB URI' }),
