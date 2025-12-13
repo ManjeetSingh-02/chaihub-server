@@ -1,6 +1,10 @@
 // import local modules
 import { envConfig } from '../../../utils/env.js';
-import { GOOGLE_OAUTH_CONFIG, OAUTH_COOKIE_CONFIG } from '../../../utils/constants.js';
+import {
+  GOOGLE_OAUTH_CONFIG,
+  OAUTH_COOKIE_CONFIG,
+  REFRESH_TOKEN_COOKIE_CONFIG,
+} from '../../../utils/constants.js';
 import { asyncHandler } from '../../../utils/async-handler.js';
 import { APIError } from '../../error.api.js';
 import { APIResponse } from '../../response.api.js';
@@ -81,7 +85,7 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
   }
 
   // ID TOKEN VERIFICATION (NONCE PROTECTION)
-  const ticket = await OAuth2ClientInstance.verifyIdToken({
+  const verificationTicket = await OAuth2ClientInstance.verifyIdToken({
     idToken: tokens.id_token,
     audience: envConfig.GOOGLE_CLIENT_ID,
     nonce: req.signedCookies[OAUTH_COOKIE_CONFIG.NONCE_NAME],
@@ -90,14 +94,32 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
   // clear oauthNonce cookie as it's already verified
   res.clearCookie(OAUTH_COOKIE_CONFIG.NONCE_NAME);
 
-  // send success status to user
-  return res.status(200).json(
-    new APIResponse(200, {
-      message: 'Google Login Successful',
-      data: {
-        tokens,
-        userInfo: ticket.getPayload(),
-      },
-    })
-  );
+  // check if verificationTicket payload is valid
+  if (!verificationTicket || !verificationTicket.getPayload())
+    throw new APIError(500, {
+      type: 'Google Login Callback Error',
+      message: 'Failed to verify from Google',
+    });
+
+  // extract user info from ticket payload
+  const userDetails = {
+    googleID: verificationTicket.getPayload().sub,
+    fullName: String(verificationTicket.getPayload().name).toLowerCase(),
+    email: String(verificationTicket.getPayload().email).toLowerCase(),
+  };
+
+  // handle googleLogin, retrieve tokens and userInfo
+  // const { userInfo, accessToken, refreshToken } = await handleGoogleLogin(userDetails);
+
+  // success status to user
+  // save refreshToken in httpOnly cookie
+  // send accessToken and userInfo in response
+  return res
+    .status(200)
+    .cookie(REFRESH_TOKEN_COOKIE_CONFIG.NAME, refreshToken, REFRESH_TOKEN_COOKIE_CONFIG.OPTIONS)
+    .json(
+      new APIResponse(200, 'Google Login Successful', {
+        data: { accessToken, userInfo },
+      })
+    );
 });
