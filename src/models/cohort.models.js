@@ -24,13 +24,8 @@ const cohortSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    allowedUsers: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
-        },
-      ],
+    allowedUserEmails: {
+      type: [String],
       default: [],
     },
     associatedGroups: {

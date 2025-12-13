@@ -1,3 +1,6 @@
+// import local modules
+import { USER_ROLES, availableUserRoles } from '../utils/constants.js';
+
 // import external modules
 import mongoose from 'mongoose';
 
@@ -78,6 +81,15 @@ const userSchema = new mongoose.Schema(
       type: [socialLinkSchema],
       default: [],
     },
+    role: {
+      type: String,
+      enum: availableUserRoles,
+      default: USER_ROLES.STUDENT,
+    },
+    refreshToken: {
+      type: String,
+      default: null,
+    },
     currentGroup: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Group',
@@ -90,7 +102,7 @@ const userSchema = new mongoose.Schema(
           ref: 'Cohort',
         },
       ],
-      default: [],
+      required: true,
     },
     auditLogs: {
       type: [

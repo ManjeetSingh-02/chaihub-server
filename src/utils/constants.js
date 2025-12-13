@@ -22,3 +22,12 @@ export const OAUTH_COOKIE_CONFIG = {
     maxAge: 5 * 60 * 1000,
   },
 };
+
+// user roles
+export const USER_ROLES = {
+  ADMIN: 'admin',
+  STUDENT: 'student',
+};
+
+// all userRoles array
+export const availableUserRoles = Object.values(USER_ROLES);
