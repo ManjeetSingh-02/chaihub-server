@@ -1,6 +1,5 @@
 // import local modules
-import { User } from '../models/user.models.js';
-import { Cohort } from '../models/cohort.models.js';
+import { Cohort, User } from '../models/index.js';
 import { APIError } from '../api/error.api.js';
 
 export async function handleGoogleLogin(userDetails) {

@@ -2,7 +2,7 @@
 import { asyncHandler } from '../../../utils/async-handler.js';
 import { APIError } from '../../error.api.js';
 import { APIResponse } from '../../response.api.js';
-import { Cohort } from '../../../models/cohort.models.js';
+import { Cohort } from '../../../models/index.js';
 
 // @controller POST /
 export const createCohort = asyncHandler(async (req, res) => {
