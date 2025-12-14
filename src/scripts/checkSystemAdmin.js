@@ -1,5 +1,6 @@
 // import local modules
 import { User } from '../models/index.js';
+import { USER_ROLES } from '../utils/constants.js';
 
 // import external modules
 import mongoose from 'mongoose';
@@ -22,8 +23,8 @@ import mongoose from 'mongoose';
     // log error
     console.error('---------------------------------------------------------');
     console.error('ERROR DURING SYSTEM ADMIN CHECK');
-    console.error('RUN SYSTEM ADMIN INITIALIZATION SCRIPT AGAIN');
     console.error(`ERROR DETAILS: ${error.message}`);
+    console.error('RUN SYSTEM ADMIN INITIALIZATION SCRIPT AGAIN');
     console.error('---------------------------------------------------------');
 
     // clean database to maintain consistency
