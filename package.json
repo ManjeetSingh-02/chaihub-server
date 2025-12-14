@@ -4,8 +4,10 @@
   "description": "Server API's for ChaiHub Application",
   "main": "index.js",
   "scripts": {
-    "start": "node --env-file=.env src/index.js",
-    "dev": "nodemon --env-file=.env src/index.js",
+    "start": "npm run check && node --env-file=.env src/index.js",
+    "dev": "npm run check && nodemon --env-file=.env src/index.js",
+    "admin:check": "node --env-file=.env src/scripts/checkSystemAdmin.js",
+    "admin:init": "node --env-file=.env src/scripts/initializeSystemAdmin.js",
     "format": "prettier --write ."
   },
   "repository": {
