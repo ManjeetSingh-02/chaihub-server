@@ -11,10 +11,10 @@ import mongoose from 'mongoose';
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('--- Database Connection: ✅');
 
-    // check if an admin user exists (can be 1 or more)
-    const existingAdminUsers = await User.find({ role: USER_ROLES.ADMIN });
-    if (existingAdminUsers.length < 1) throw new Error('No Admin User Found');
-    console.log('--- Admin User Exists: ✅');
+    // check if any system_admin user exists (can be 1 or more)
+    const existingSystemAdminUsers = await User.find({ role: USER_ROLES.SYSTEM_ADMIN });
+    if (existingSystemAdminUsers.length < 1) throw new Error('No System_Admin User Found');
+    console.log('--- System_Admin User Exists: ✅');
 
     // disconnect from database
     await mongoose.disconnect();
