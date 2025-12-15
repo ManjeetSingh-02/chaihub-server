@@ -3,6 +3,7 @@ import { asyncHandler } from '../../../utils/async-handler.js';
 import { APIError } from '../../error.api.js';
 import { APIResponse } from '../../response.api.js';
 import { Cohort } from '../../../models/index.js';
+import { USER_ROLES } from '../../../utils/constants.js';
 
 // @controller POST /
 export const createCohort = asyncHandler(async (req, res) => {
@@ -22,6 +23,7 @@ export const createCohort = asyncHandler(async (req, res) => {
     cohortName,
     cohortDescription,
     createdBy: req.user.id,
+    allowedUserEmails: req.user.role === USER_ROLES.SYSTEM_ADMIN ? [req.user.email] : [],
   });
   if (!newCohort)
     throw new APIError(500, {
@@ -33,7 +35,7 @@ export const createCohort = asyncHandler(async (req, res) => {
   return res.status(201).json(
     new APIResponse(201, {
       message: 'Cohort created successfully',
-      data: newCohort,
+      data: { newCohortName: newCohort.cohortName },
     })
   );
 });
