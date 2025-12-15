@@ -39,3 +39,19 @@ export const createCohort = asyncHandler(async (req, res) => {
     })
   );
 });
+
+// @controller GET /
+export const getAllCohorts = asyncHandler(async (_, res) => {
+  // fetch all cohorts from db
+  const allCohorts = await Cohort.find()
+    .select('cohortName cohortDescription createdBy')
+    .populate('createdBy', '-_id username');
+
+  // send success status to user
+  return res.status(200).json(
+    new APIResponse(200, {
+      message: 'All Cohorts fetched successfully',
+      data: allCohorts,
+    })
+  );
+});

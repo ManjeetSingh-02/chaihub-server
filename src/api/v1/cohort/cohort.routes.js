@@ -1,7 +1,7 @@
 // import local modules
 import { USER_ROLES } from '../../../utils/constants.js';
 import { hasRequiredRole, isLoggedIn, validateSchema } from '../../../utils/route-protector.js';
-import { createCohort } from './cohort.controllers.js';
+import { createCohort, getAllCohorts } from './cohort.controllers.js';
 import { createCohortSchema } from './cohort.zodschemas.js';
 
 // import external modules
@@ -18,6 +18,9 @@ router.post(
   validateSchema(createCohortSchema),
   createCohort
 );
+
+// @route GET /
+router.get('/', isLoggedIn, getAllCohorts);
 
 // export router
 export default router;
