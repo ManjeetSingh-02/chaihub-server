@@ -2,8 +2,8 @@
 import {
   USER_ROLES,
   availableUserRoles,
-  ACCESS_TOKEN_EXPIRY,
-  REFRESH_TOKEN_EXPIRY,
+  ACCESS_TOKEN_LIFETIME,
+  REFRESH_TOKEN_LIFETIME,
 } from '../utils/constants.js';
 import { envConfig } from '../utils/env.js';
 
@@ -134,14 +134,14 @@ const userSchema = new mongoose.Schema(
 // method to generateAccessToken
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign({ id: this._id }, envConfig.ACCESS_TOKEN_SECRET, {
-    expiresIn: ACCESS_TOKEN_EXPIRY,
+    expiresIn: ACCESS_TOKEN_LIFETIME,
   });
 };
 
 // method to generateRefreshToken
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign({ id: this._id }, envConfig.REFRESH_TOKEN_SECRET, {
-    expiresIn: REFRESH_TOKEN_EXPIRY,
+    expiresIn: REFRESH_TOKEN_LIFETIME,
   });
 };
 

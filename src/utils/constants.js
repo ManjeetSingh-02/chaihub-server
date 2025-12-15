@@ -23,11 +23,11 @@ export const OAUTH_COOKIE_CONFIG = {
   },
 };
 
-// export accessToken expiry duration(15 mins)
-export const ACCESS_TOKEN_EXPIRY = 15 * 60 * 1000;
+// export accessToken expiry duration(5 mins)
+export const ACCESS_TOKEN_LIFETIME = 5 * 60 * 1000;
 
 // export refreshToken expiry duration (24 hrs)
-export const REFRESH_TOKEN_EXPIRY = 24 * 60 * 60 * 1000;
+export const REFRESH_TOKEN_LIFETIME = 24 * 60 * 60 * 1000;
 
 // export refreshToken Cookie constants
 export const REFRESH_TOKEN_COOKIE_CONFIG = {
