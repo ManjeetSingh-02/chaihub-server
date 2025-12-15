@@ -52,7 +52,7 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
     res.clearCookie(OAUTH_COOKIE_CONFIG.NONCE_NAME);
 
     // throw error for invalid oauthState
-    throw new APIError(400, {
+    throw new APIError(403, {
       type: 'Google Login Callback Error',
       message: 'Invalid oauthState received from Google',
     });
