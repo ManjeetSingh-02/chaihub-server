@@ -38,3 +38,13 @@ export const processCSVandAddUsersToCohortSchema = z.object({
       .max(5, { message: 'At most 5 CSV files are allowed' }),
   }),
 });
+
+// zod schema for addUserToCohort
+export const addUserToCohortSchema = z.object({
+  params: z.object({
+    cohortName: z.string().trim().nonempty({ message: 'cohortName is required' }),
+  }),
+  body: z.object({
+    userEmail: z.email({ message: 'Valid userEmail is required' }).trim().toLowerCase(),
+  }),
+});

@@ -2,11 +2,16 @@
 import { USER_ROLES } from '../../../utils/constants.js';
 import { hasRequiredRole, isLoggedIn, validateSchema } from '../../../utils/route-protector.js';
 import {
+  addUserToCohort,
   createCohort,
   getAllCohorts,
   processCSVandAddUsersToCohort,
 } from './cohort.controllers.js';
-import { createCohortSchema, processCSVandAddUsersToCohortSchema } from './cohort.zodschemas.js';
+import {
+  addUserToCohortSchema,
+  createCohortSchema,
+  processCSVandAddUsersToCohortSchema,
+} from './cohort.zodschemas.js';
 import { uploadCSVFiles } from '../../../utils/process-csv.js';
 
 // import external modules
@@ -35,6 +40,15 @@ router.patch(
   uploadCSVFiles,
   validateSchema(processCSVandAddUsersToCohortSchema),
   processCSVandAddUsersToCohort
+);
+
+// @route PATCH /:cohortName/add-user
+router.patch(
+  '/:cohortName/add-user',
+  isLoggedIn,
+  hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
+  validateSchema(addUserToCohortSchema),
+  addUserToCohort
 );
 
 // export router

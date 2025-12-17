@@ -97,3 +97,33 @@ export const processCSVandAddUsersToCohort = asyncHandler(async (req, res) => {
     })
   );
 });
+
+// @controller PATCH /:cohortName/add-user
+export const addUserToCohort = asyncHandler(async (req, res) => {
+  // add user email to cohort using $addToSet to avoid duplicates
+  const updatedCohort = await Cohort.updateOne(
+    { cohortName: req.params.cohortName },
+    { $addToSet: { allowedUserEmails: req.body.userEmail } }
+  );
+
+  // check if cohort was found
+  if (updatedCohort.matchedCount === 0)
+    throw new APIError(404, {
+      type: 'Add User Error',
+      message: 'Cohort not found',
+    });
+
+  // check if cohort was updated
+  if (updatedCohort.modifiedCount === 0)
+    throw new APIError(409, {
+      type: 'Add User Error',
+      message: 'User email already exists in cohort',
+    });
+
+  // send success status to user
+  return res.status(200).json(
+    new APIResponse(200, {
+      message: 'User email added to cohort successfully',
+    })
+  );
+});
