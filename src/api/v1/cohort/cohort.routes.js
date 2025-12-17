@@ -6,11 +6,13 @@ import {
   createCohort,
   getAllCohorts,
   processCSVandAddUsersToCohort,
+  removeUserFromCohort,
 } from './cohort.controllers.js';
 import {
   addUserToCohortSchema,
   createCohortSchema,
   processCSVandAddUsersToCohortSchema,
+  removeUserFromCohortSchema,
 } from './cohort.zodschemas.js';
 import { uploadCSVFiles } from '../../../utils/process-csv.js';
 
@@ -49,6 +51,15 @@ router.patch(
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
   validateSchema(addUserToCohortSchema),
   addUserToCohort
+);
+
+// @route PATCH /:cohortName/remove-user
+router.patch(
+  '/:cohortName/remove-user',
+  isLoggedIn,
+  hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
+  validateSchema(removeUserFromCohortSchema),
+  removeUserFromCohort
 );
 
 // export router

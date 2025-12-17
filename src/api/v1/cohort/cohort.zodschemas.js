@@ -48,3 +48,13 @@ export const addUserToCohortSchema = z.object({
     userEmail: z.email({ message: 'Valid userEmail is required' }).trim().toLowerCase(),
   }),
 });
+
+// zod schema for removeUserFromCohort
+export const removeUserFromCohortSchema = z.object({
+  params: z.object({
+    cohortName: z.string().trim().nonempty({ message: 'cohortName is required' }),
+  }),
+  body: z.object({
+    userEmail: z.email({ message: 'Valid userEmail is required' }).trim().toLowerCase(),
+  }),
+});

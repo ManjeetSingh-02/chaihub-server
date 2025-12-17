@@ -127,3 +127,33 @@ export const addUserToCohort = asyncHandler(async (req, res) => {
     })
   );
 });
+
+// @controller PATCH /:cohortName/remove-user
+export const removeUserFromCohort = asyncHandler(async (req, res) => {
+  // remove user email from cohort using $pull
+  const updatedCohort = await Cohort.updateOne(
+    { cohortName: req.params.cohortName },
+    { $pull: { allowedUserEmails: req.body.userEmail } }
+  );
+
+  // check if cohort was found
+  if (updatedCohort.matchedCount === 0)
+    throw new APIError(404, {
+      type: 'Remove User Error',
+      message: 'Cohort not found',
+    });
+
+  // check if cohort was updated
+  if (updatedCohort.modifiedCount === 0)
+    throw new APIError(404, {
+      type: 'Remove User Error',
+      message: 'User email not found in cohort',
+    });
+
+  // send success status to user
+  return res.status(200).json(
+    new APIResponse(200, {
+      message: 'User email removed from cohort successfully',
+    })
+  );
+});
