@@ -87,7 +87,7 @@ export const processCSVandAddUsersToCohort = asyncHandler(async (req, res) => {
   existingCohort.allowedUserEmails = Array.from(emailSet);
 
   // save updated cohort to db
-  await existingCohort.save();
+  await existingCohort.save({ validateBeforeSave: false });
 
   // send success status to user
   return res.status(200).json(
