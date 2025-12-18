@@ -78,13 +78,6 @@ const groupSchema = new mongoose.Schema(
       minLength: 5,
       maxLength: 50,
     },
-    groupDescription: {
-      type: String,
-      required: true,
-      trim: true,
-      minLength: 20,
-      maxLength: 200,
-    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -97,7 +90,7 @@ const groupSchema = new mongoose.Schema(
           ref: 'User',
         },
       ],
-      default: [],
+      required: true,
     },
     maximumMembers: {
       type: Number,
@@ -133,12 +126,6 @@ const groupSchema = new mongoose.Schema(
 
 // create index on groupName for faster search
 groupSchema.index({ groupName: 1, associatedCohort: 1 }, { unique: true });
-
-// pre-hook to add the creator as the first member of the group
-groupSchema.pre('save', function (next) {
-  if (this.isNew) this.groupMembers.push(this.createdBy);
-  next();
-});
 
 // export group model
 export default mongoose.model('Group', groupSchema);
