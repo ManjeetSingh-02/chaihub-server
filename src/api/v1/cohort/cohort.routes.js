@@ -17,6 +17,7 @@ import {
   updateCohortDescriptionSchema,
 } from './cohort.zodschemas.js';
 import { uploadCSVFiles } from '../../../utils/process-csv.js';
+import groupRouter from '../group/group.routes.js';
 
 // import external modules
 import { Router } from 'express';
@@ -72,6 +73,9 @@ router.patch(
   validateSchema(removeUserFromCohortSchema),
   removeUserFromCohort
 );
+
+// @route /:cohortName/group
+router.use('/:cohortName/group', groupRouter);
 
 // export router
 export default router;
