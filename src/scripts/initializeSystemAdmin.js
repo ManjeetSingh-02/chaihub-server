@@ -29,19 +29,18 @@ async function getSystemAdminUserEmailFromCLI() {
     // get systemAdminUserEmail from CLI
     const email = await getSystemAdminUserEmailFromCLI();
 
-    // check if any system_admin user already exists
-    const existingSystemAdminUsers = await User.find({ role: USER_ROLES.SYSTEM_ADMIN });
+    // find existing system_admin user
+    const existingSystemAdminUser = await User.findOne({ role: USER_ROLES.SYSTEM_ADMIN });
 
-    // if system_admin user exists with same email, throw error
-    if (existingSystemAdminUsers.find(user => user.email === email))
-      throw new Error('System_Admin User with this email already exists');
+    // if system_admin user exists, throw error as only one system admin user is allowed
+    if (existingSystemAdminUser) throw new Error('A System_Admin User already exists');
 
     // create systemAdminUser with provided email
     const systemAdminUser = await User.create({
       email,
-      fullName: `System Admin ${existingSystemAdminUsers.length + 1}`,
+      fullName: `System Admin`,
       role: USER_ROLES.SYSTEM_ADMIN,
-      username: `system_admin_${existingSystemAdminUsers.length + 1}`,
+      username: `system_admin`,
     });
     if (!systemAdminUser) throw new Error('Something went wrong while creating System_Admin User');
     console.log('--- System_Admin User Created Successfully: ✅');
