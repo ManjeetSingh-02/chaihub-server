@@ -84,8 +84,8 @@ router.patch(
   removeUserFromCohort
 );
 
-// @route /:cohortName/group
-router.use('/:cohortName/group', isLoggedIn, isCohortValid, isUserAllowedInCohort, groupRouter);
+// @route /:cohortName/groups
+router.use('/:cohortName/groups', isLoggedIn, isCohortValid, isUserAllowedInCohort, groupRouter);
 
 // export router
 export default router;
