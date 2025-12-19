@@ -4,8 +4,8 @@ import { MAX_GROUP_MEMBERS } from '../utils/constants.js';
 // import external modules
 import mongoose from 'mongoose';
 
-// schema for skill set
-const skillSetSchema = new mongoose.Schema(
+// schema for tech stack
+const techStackSchema = new mongoose.Schema(
   {
     skillName: {
       type: String,
@@ -28,8 +28,8 @@ const roleRequirementSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    skillSet: {
-      type: [skillSetSchema],
+    techStack: {
+      type: [techStackSchema],
       required: true,
     },
   },
