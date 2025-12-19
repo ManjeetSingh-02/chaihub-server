@@ -21,10 +21,10 @@ export const getAllUsers = asyncHandler(async (_, res) => {
   );
 });
 
-// @controller GET /:username
+// @controller GET /profile
 export const getUser = asyncHandler(async (req, res) => {
   // fetch user from db
-  const existingUser = await User.findOne({ username: req.params.username })
+  const existingUser = await User.findById(req.user.id)
     .select('_id googleID email username role currentGroup enrolledCohorts')
     .populate('currentGroup', 'groupName')
     .populate('enrolledCohorts', 'cohortName');
@@ -36,7 +36,7 @@ export const getUser = asyncHandler(async (req, res) => {
   // send success status to user
   return res.status(200).json(
     new APIResponse(200, {
-      message: 'Fetched user successfully',
+      message: 'Fetched profile successfully',
       data: existingUser,
     })
   );

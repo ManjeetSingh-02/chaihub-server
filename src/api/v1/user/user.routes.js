@@ -12,8 +12,8 @@ const router = Router();
 // @route GET /
 router.get('/', isLoggedIn, hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]), getAllUsers);
 
-// @route GET /:username
-router.get('/:username', isLoggedIn, getUser);
+// @route GET /profile
+router.get('/profile', isLoggedIn, getUser);
 
 // export router
 export default router;
