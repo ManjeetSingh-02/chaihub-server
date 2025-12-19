@@ -3,6 +3,7 @@ import { asyncHandler } from '../../../utils/async-handler.js';
 import { APIResponse } from '../../response.api.js';
 import { APIError } from '../../error.api.js';
 import { User } from '../../../models/index.js';
+import { USER_ROLES } from '../../../utils/constants.js';
 
 // @controller GET /
 export const getAllUsers = asyncHandler(async (_, res) => {
@@ -81,6 +82,12 @@ export const updateUserRole = asyncHandler(async (req, res) => {
   if (!existingUser)
     throw new APIError(404, {
       message: 'User not found',
+    });
+
+  // check if newRole is system_admin
+  if (req.body.newRole === USER_ROLES.SYSTEM_ADMIN)
+    throw new APIError(403, {
+      message: 'Only one system admin is allowed in the system',
     });
 
   // check if user has already the role
