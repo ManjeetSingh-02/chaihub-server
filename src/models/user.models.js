@@ -16,22 +16,6 @@ function isFieldRequired() {
   return this.role !== USER_ROLES.SYSTEM_ADMIN;
 }
 
-// schema for user expertise
-const userExpertiseSchema = new mongoose.Schema(
-  {
-    roleName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    techStack: {
-      type: [techStackSchema],
-      required: true,
-    },
-  },
-  { _id: false }
-);
-
 // schema for techStack
 const techStackSchema = new mongoose.Schema(
   {
@@ -49,6 +33,22 @@ const techStackSchema = new mongoose.Schema(
   {
     _id: false,
   }
+);
+
+// schema for user expertise
+const userExpertiseSchema = new mongoose.Schema(
+  {
+    roleName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    techStack: {
+      type: [techStackSchema],
+      required: true,
+    },
+  },
+  { _id: false }
 );
 
 // schema for socialLink
