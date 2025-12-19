@@ -82,7 +82,7 @@ export const isLoggedIn = asyncHandler(async (req, _, next) => {
 
   // check if user exists
   const loggedInUser = await User.findById(decodedToken?.id).select(
-    '_id email role currentGroup enrolledCohorts'
+    '_id email role userExpertise socialLinks currentGroup enrolledCohorts'
   );
   if (!loggedInUser)
     throw new APIError(401, {
