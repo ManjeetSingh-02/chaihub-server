@@ -22,6 +22,9 @@ export const getCohortDetailsandGroups = asyncHandler(async (req, res) => {
     },
   ]);
 
+  // object-converted populated cohort data
+  const populatedCohortDataObject = populatedCohortData.toObject();
+
   // send success status to user
   return res.status(200).json(
     new APIResponse(200, {
@@ -31,7 +34,10 @@ export const getCohortDetailsandGroups = asyncHandler(async (req, res) => {
         cohortName: req.cohort.cohortName,
         cohortDescription: req.cohort.cohortDescription,
         createdBy: populatedCohortData.createdBy,
-        associatedGroups: populatedCohortData.associatedGroups,
+        associatedGroups: populatedCohortDataObject.associatedGroups.map(associatedGroup => ({
+          ...associatedGroup,
+          groupMembers: associatedGroup.groupMembers.length,
+        })),
       },
     })
   );
