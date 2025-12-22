@@ -1,5 +1,6 @@
 // import local modules
 import { createGroup, getCohortDetailsandGroups } from './group.controllers.js';
+import { isUserAlreadyInAGroup } from '../../../utils/route-protector.js';
 
 // import external modules
 import { Router } from 'express';
@@ -11,7 +12,7 @@ const router = Router({ mergeParams: true });
 router.get('/', getCohortDetailsandGroups);
 
 // @route POST /
-router.post('/', createGroup);
+router.post('/', isUserAlreadyInAGroup, createGroup);
 
 // export router
 export default router;

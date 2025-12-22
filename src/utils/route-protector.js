@@ -42,6 +42,19 @@ export const isUserAllowedInCohort = asyncHandler(async (req, _, next) => {
   next();
 });
 
+// function to check if user is already in a group
+export const isUserAlreadyInAGroup = asyncHandler(async (req, _, next) => {
+  // if user is already in a group, throw an error
+  if (req.user.currentGroup)
+    throw new APIError(409, {
+      type: 'Group Membership Error',
+      message: 'User is already in a group, cannot join another group',
+    });
+
+  // forward request to next middleware
+  next();
+});
+
 // function to check for any validation errors
 export const validateSchema = zodSchema =>
   asyncHandler(async (req, _, next) => {
