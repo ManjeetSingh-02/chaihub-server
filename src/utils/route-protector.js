@@ -35,7 +35,7 @@ export const isUserAllowedInCohort = asyncHandler(async (req, _, next) => {
   if (!req.cohort.allowedUserEmails.includes(req.user.email))
     throw new APIError(403, {
       type: 'Cohort Authorization Error',
-      message: `User with email '${req.user.email}' is not allowed in cohort '${req.cohort.cohortName}'`,
+      message: `User with email '${req.user.email}' is not allowed in cohort '${req.params.cohortName}'`,
     });
 
   // forward request to next middleware
