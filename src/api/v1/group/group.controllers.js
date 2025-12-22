@@ -81,3 +81,26 @@ export const createGroup = asyncHandler(async (req, res) => {
     })
   );
 });
+
+// @controller GET /:groupName
+export const getGroupDetails = asyncHandler(async (req, res) => {
+  // populate group details for response
+  const populatedGroupData = await req.group.populate([
+    {
+      path: 'createdBy',
+      select: '_id username',
+    },
+    {
+      path: 'currentGroupMembers',
+      select: '_id username',
+    },
+  ]);
+
+  // send success status to user
+  return res.status(200).json(
+    new APIResponse(200, {
+      message: 'Group details fetched successfully',
+      data: populatedGroupData.toObject(),
+    })
+  );
+});

@@ -3,7 +3,7 @@ import { APIError } from '../api/error.api.js';
 import { asyncHandler } from './async-handler.js';
 import { REFRESH_TOKEN_COOKIE_CONFIG } from './constants.js';
 import { envConfig } from './env.js';
-import { Cohort, User } from '../models/index.js';
+import { Cohort, Group, User } from '../models/index.js';
 
 // import external modules
 import jwt from 'jsonwebtoken';
@@ -50,6 +50,35 @@ export const isUserAlreadyInAGroup = asyncHandler(async (req, _, next) => {
       type: 'Group Membership Error',
       message: 'User is already in a group, cannot join another group',
     });
+
+  // forward request to next middleware
+  next();
+});
+
+// function to check if user is allowed in the group
+export const isUserAllowedInGroup = asyncHandler(async (req, _, next) => {
+  // fetch group from db
+  const existingGroup = await Group.findOne({
+    groupName: req.params.groupName,
+    associatedCohort: req.cohort._id,
+  }).select(
+    '_id groupName createdBy currentGroupMembers groupMembersCount maximumMembersCount roleRequirements groupAnnouncements'
+  );
+  if (!existingGroup)
+    throw new APIError(404, {
+      type: 'Group Validation Error',
+      message: `Group '${req.params.groupName}' not found in this cohort`,
+    });
+
+  // check if user is not a member of the group
+  if (!req.user.currentGroup || req.user.currentGroup.toString() !== existingGroup._id.toString())
+    throw new APIError(403, {
+      type: 'Group Authorization Error',
+      message: `User is not a member of group '${req.params.groupName}'`,
+    });
+
+  // set group in request object
+  req.group = existingGroup;
 
   // forward request to next middleware
   next();
