@@ -59,9 +59,7 @@ export const getAllCohorts = asyncHandler(async (_, res) => {
 // @controller PATCH /:cohortName/process-csv
 export const processCSVandAddUsersToCohort = asyncHandler(async (req, res) => {
   // fetch cohort from db
-  const existingCohort = await Cohort.findOne({ cohortName: req.params.cohortName }).select(
-    'allowedUserEmails'
-  );
+  const existingCohort = await Cohort.findById(req.cohort.id).select('allowedUserEmails');
 
   // parse all uploaded CSV files
   const allParsedFileResults = await Promise.all(
