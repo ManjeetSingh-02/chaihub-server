@@ -53,14 +53,21 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
       message: 'No fields are provided to update user profile',
     });
 
-  // if userExpertise is present in the body, update it
-  if (req.body.newUserExpertise) req.user.userExpertise = req.body.newUserExpertise;
+  // update user profile
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      userExpertise: req.body.newUserExpertise,
+      socialLinks: req.body.newSocialLinks,
+    },
+    { runValidators: true, new: true }
+  );
 
-  // if socialLinks is present in the body, update it
-  if (req.body.newSocialLinks) req.user.socialLinks = req.body.newSocialLinks;
-
-  // save updated user to db
-  await req.user.save();
+  // check if user was updated
+  if (!updatedUser)
+    throw new APIError(500, {
+      message: 'Failed to update profile',
+    });
 
   // send success status to user
   return res.status(200).json(
