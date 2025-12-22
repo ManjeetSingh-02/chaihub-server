@@ -43,7 +43,9 @@ export const createGroup = asyncHandler(async (req, res) => {
   const existingGroup = await Group.findOne({
     groupName: req.body.groupName,
     associatedCohort: req.cohort._id,
-  });
+  })
+    .select('_id')
+    .lean();
   if (existingGroup)
     throw new APIError(409, {
       type: 'Create Group Error',

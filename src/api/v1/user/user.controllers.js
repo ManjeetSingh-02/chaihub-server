@@ -29,7 +29,8 @@ export const getUser = asyncHandler(async (req, res) => {
   const existingUser = await User.findById(req.user._id)
     .select('_id email username role currentGroup enrolledCohorts userExpertise socialLinks')
     .populate('currentGroup', 'groupName')
-    .populate('enrolledCohorts', 'cohortName');
+    .populate('enrolledCohorts', 'cohortName')
+    .lean();
   if (!existingUser)
     throw new APIError(404, {
       message: 'User not found',

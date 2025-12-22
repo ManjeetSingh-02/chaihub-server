@@ -4,7 +4,9 @@ import { APIError } from '../api/error.api.js';
 
 export async function handleGoogleLogin(userDetails) {
   // check if user is already registered
-  const existingUser = await User.findOne({ email: userDetails.email });
+  const existingUser = await User.findOne({ email: userDetails.email }).select(
+    'googleID refreshToken'
+  );
 
   // --------------------------------------------------
   // LOGIN PATH: User is already registered
@@ -30,7 +32,9 @@ export async function handleGoogleLogin(userDetails) {
   // Check if user is allowed in any cohorts
   const allowedCohorts = await Cohort.find({
     allowedUserEmails: { $in: [userDetails.email] },
-  });
+  })
+    .select('_id')
+    .lean();
 
   // if not allowed, throw error
   if (allowedCohorts.length === 0)
