@@ -81,7 +81,9 @@ export const isUserAllowedInGroup = asyncHandler(async (req, _, next) => {
     });
 
   // set group in request object
-  req.group = existingGroup;
+  req.group = {
+    id: existingGroup._id,
+  };
 
   // forward request to next middleware
   next();
