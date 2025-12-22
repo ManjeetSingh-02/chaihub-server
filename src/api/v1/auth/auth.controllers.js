@@ -132,7 +132,7 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
 // @controller GET /logout
 export const googleLogout = asyncHandler(async (req, res) => {
   // get user from db and set refreshToken to null
-  await User.findByIdAndUpdate(req.user._id, {
+  await User.findByIdAndUpdate(req.user.id, {
     refreshToken: null,
   });
 

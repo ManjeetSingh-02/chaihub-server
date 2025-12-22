@@ -22,7 +22,7 @@ export const createCohort = asyncHandler(async (req, res) => {
   const newCohort = await Cohort.create({
     cohortName: req.body.cohortName,
     cohortDescription: req.body.cohortDescription,
-    createdBy: req.user._id,
+    createdBy: req.user.id,
   });
   if (!newCohort)
     throw new APIError(500, {
