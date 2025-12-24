@@ -16,6 +16,7 @@ import {
   updateGroupAnnouncementsSchema,
   updateGroupRoleRequirementsSchema,
 } from './group.zodschemas.js';
+import applicationRouter from '../application/application.routes.js';
 
 // import external modules
 import { Router } from 'express';
@@ -47,6 +48,9 @@ router.patch(
   validateSchema(updateGroupAnnouncementsSchema),
   updateGroupAnnouncements
 );
+
+// @route /:groupName/applications
+router.use('/:groupName/applications', applicationRouter);
 
 // export router
 export default router;
