@@ -5,17 +5,17 @@ import { z } from 'zod';
 const cohortNameSchema = z
   .string()
   .trim()
-  .nonempty({ message: 'cohortName is required' })
-  .min(10, { message: 'cohortName must be at least 10 characters long' })
-  .max(50, { message: 'cohortName must be at most 50 characters long' });
+  .nonempty({ error: 'cohortName is required' })
+  .min(10, { error: 'cohortName must be at least 10 characters long' })
+  .max(30, { error: 'cohortName must be at most 30 characters long' });
 
 // zod schema for cohortDescription
 const cohortDescriptionSchema = z
   .string()
   .trim()
-  .nonempty({ message: 'cohortDescription is required' })
-  .min(20, { message: 'cohortDescription must be at least 20 characters long' })
-  .max(200, { message: 'cohortDescription must be at most 200 characters long' });
+  .nonempty({ error: 'cohortDescription is required' })
+  .min(10, { error: 'cohortDescription must be at least 10 characters long' })
+  .max(200, { error: 'cohortDescription must be at most 200 characters long' });
 
 // zod schema for createCohort
 export const createCohortSchema = z.object({
@@ -28,41 +28,41 @@ export const createCohortSchema = z.object({
 // zod schema for processCSVandAddUsersToCohort
 export const processCSVandAddUsersToCohortSchema = z.object({
   params: z.object({
-    cohortName: z.string().trim().nonempty({ message: 'cohortName is required' }),
+    cohortName: z.string().trim().nonempty({ error: 'cohortName is required' }),
   }),
 
   files: z.object({
     csvFiles: z
       .array(z.any())
-      .min(1, { message: 'At least 1 CSV file is required' })
-      .max(5, { message: 'At most 5 CSV files are allowed' }),
+      .min(1, { error: 'At least 1 CSV file is required' })
+      .max(5, { error: 'At most 5 CSV files are allowed' }),
   }),
 });
 
 // zod schema for addUserToCohort
 export const addUserToCohortSchema = z.object({
   params: z.object({
-    cohortName: z.string().trim().nonempty({ message: 'cohortName is required' }),
+    cohortName: z.string().trim().nonempty({ error: 'cohortName is required' }),
   }),
   body: z.object({
-    userEmail: z.email({ message: 'Valid userEmail is required' }).trim().toLowerCase(),
+    userEmail: z.email({ error: 'Valid userEmail is required' }).trim().toLowerCase(),
   }),
 });
 
 // zod schema for removeUserFromCohort
 export const removeUserFromCohortSchema = z.object({
   params: z.object({
-    cohortName: z.string().trim().nonempty({ message: 'cohortName is required' }),
+    cohortName: z.string().trim().nonempty({ error: 'cohortName is required' }),
   }),
   body: z.object({
-    userEmail: z.email({ message: 'Valid userEmail is required' }).trim().toLowerCase(),
+    userEmail: z.email({ error: 'Valid userEmail is required' }).trim().toLowerCase(),
   }),
 });
 
 // zod schema for updateCohortDescription
 export const updateCohortDescriptionSchema = z.object({
   params: z.object({
-    cohortName: z.string().trim().nonempty({ message: 'cohortName is required' }),
+    cohortName: z.string().trim().nonempty({ error: 'cohortName is required' }),
   }),
   body: z.object({
     cohortDescription: cohortDescriptionSchema,
