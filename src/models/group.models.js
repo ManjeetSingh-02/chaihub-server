@@ -87,15 +87,6 @@ const groupSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    currentGroupMembers: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
-        },
-      ],
-      required: true,
-    },
     groupMembersCount: {
       type: Number,
       default: 1,
@@ -110,15 +101,6 @@ const groupSchema = new mongoose.Schema(
     },
     groupAnnouncements: {
       type: [announcementSchema],
-      default: [],
-    },
-    associatedApplications: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Application',
-        },
-      ],
       default: [],
     },
     associatedCohort: {
