@@ -8,16 +8,8 @@ import { Cohort, Group, User } from '../../../models/index.js';
 export const getCohortDetailsandGroups = asyncHandler(async (req, res) => {
   // fetch cohort from db
   const existingCohort = await Cohort.findById(req.cohort.id)
-    .select('_id cohortName cohortDescription createdBy associatedGroups')
+    .select('_id cohortName cohortDescription createdBy')
     .populate('createdBy', '_id username')
-    .populate({
-      path: 'associatedGroups',
-      select: '_id groupName createdBy groupMembersCount maximumMembersCount roleRequirements',
-      populate: {
-        path: 'createdBy',
-        select: '_id username',
-      },
-    })
     .lean();
   if (!existingCohort)
     throw new APIError(404, {
@@ -66,11 +58,6 @@ export const createGroup = asyncHandler(async (req, res) => {
   const existingUser = await User.findById(req.user.id).select('currentGroup');
   existingUser.currentGroup = newGroup._id;
   await existingUser.save({ validateBeforeSave: false });
-
-  // update cohort's associatedGroups field and save it
-  const existingCohort = await Cohort.findById(req.cohort.id).select('associatedGroups');
-  existingCohort.associatedGroups.push(newGroup._id);
-  await existingCohort.save({ validateBeforeSave: false });
 
   // send success status to user
   return res.status(201).json(
