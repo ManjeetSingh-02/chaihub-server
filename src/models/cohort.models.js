@@ -1,6 +1,6 @@
 // import local modules
 import { USER_ROLES } from '../utils/constants.js';
-import { Cohort, User } from './index.js';
+import { User } from './index.js';
 
 // import external modules
 import mongoose from 'mongoose';
@@ -51,6 +51,17 @@ cohortSchema.pre('save', async function () {
       this.allowedUserEmails.push(systemAdmin.email);
   }
 });
+
+// virtual field to get all groups associated with a cohort
+cohortSchema.virtual('associatedGroups', {
+  ref: 'Group',
+  localField: '_id',
+  foreignField: 'associatedCohort',
+});
+
+// set virtuals to be included in toObject and toJSON outputs
+cohortSchema.set('toObject', { virtuals: true });
+cohortSchema.set('toJSON', { virtuals: true });
 
 // export cohort model
 export default mongoose.model('Cohort', cohortSchema);
