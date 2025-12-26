@@ -137,5 +137,16 @@ userSchema.methods.generateRefreshToken = function () {
   });
 };
 
+// virtual field to get all cohorts the user is enrolled in
+userSchema.virtual('enrolledCohorts', {
+  ref: 'Cohort',
+  localField: 'email',
+  foreignField: 'allowedUserEmails',
+});
+
+// set virtuals to be included in toObject and toJSON outputs
+userSchema.set('toObject', { virtuals: true });
+userSchema.set('toJSON', { virtuals: true });
+
 // export user model
 export default mongoose.model('User', userSchema);
