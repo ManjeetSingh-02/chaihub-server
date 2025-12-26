@@ -53,6 +53,10 @@ export const getGroupDetails = asyncHandler(async (req, res) => {
       '_id groupName createdBy groupMembersCount maximumMembersCount roleRequirements groupAnnouncements'
     )
     .populate('createdBy', '_id username')
+    .populate({
+      path: 'currentGroupMembers',
+      select: '_id username -currentGroup',
+    })
     .lean();
 
   if (!existingGroup)
@@ -60,14 +64,6 @@ export const getGroupDetails = asyncHandler(async (req, res) => {
       type: 'Group Fetch Error',
       message: 'Group not found',
     });
-
-  // find all current group members of the group
-  const currentGroupMembers = await User.find({ currentGroup: existingGroup._id })
-    .select('_id username')
-    .lean();
-
-  // attach current group members to group object
-  existingGroup.currentGroupMembers = currentGroupMembers;
 
   // send success status to user
   return res.status(200).json(

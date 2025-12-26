@@ -117,5 +117,16 @@ const groupSchema = new mongoose.Schema(
 // create index on groupName for faster search
 groupSchema.index({ groupName: 1, associatedCohort: 1 }, { unique: true });
 
+// virtual field to get all groups associated with a cohort
+groupSchema.virtual('currentGroupMembers', {
+  ref: 'User',
+  localField: '_id',
+  foreignField: 'currentGroup',
+});
+
+// set virtuals to be included in toObject and toJSON outputs
+groupSchema.set('toObject', { virtuals: true });
+groupSchema.set('toJSON', { virtuals: true });
+
 // export group model
 export default mongoose.model('Group', groupSchema);
