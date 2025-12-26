@@ -11,6 +11,7 @@ import {
   addUserToCohort,
   createCohort,
   getAllCohorts,
+  getCohortDetails,
   processCSVandAddUsersToCohort,
   removeUserFromCohort,
   updateCohortDescription,
@@ -42,6 +43,9 @@ router.post(
 
 // @route GET /
 router.get('/', isLoggedIn, getAllCohorts);
+
+// @route GET /:cohortName
+router.get('/:cohortName', isLoggedIn, isCohortValid, isUserAllowedInCohort, getCohortDetails);
 
 // @route PATCH /:cohortName/description
 router.patch(
