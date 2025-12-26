@@ -45,7 +45,6 @@ export const createGroup = asyncHandler(async (req, res) => {
   const newGroup = await Group.create({
     groupName: req.body.groupName,
     createdBy: req.user.id,
-    currentGroupMembers: [req.user.id],
     associatedCohort: req.cohort.id,
   });
   if (!newGroup)
@@ -73,10 +72,9 @@ export const getGroupDetails = asyncHandler(async (req, res) => {
   // fetch group from db
   const existingGroup = await Group.findById(req.group.id)
     .select(
-      '_id groupName createdBy currentGroupMembers groupMembersCount maximumMembersCount roleRequirements groupAnnouncements'
+      '_id groupName createdBy groupMembersCount maximumMembersCount roleRequirements groupAnnouncements'
     )
     .populate('createdBy', '_id username')
-    .populate('currentGroupMembers', '_id username')
     .lean();
 
   if (!existingGroup)
