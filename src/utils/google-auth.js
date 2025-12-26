@@ -48,7 +48,6 @@ export async function handleGoogleLogin(userDetails) {
     googleID: userDetails.googleID,
     email: userDetails.email,
     username: `${userDetails.email.split('@')[0].slice(0, 10)}${generateRandomSuffix()}`,
-    enrolledCohorts: allowedCohorts.map(cohort => cohort._id),
   });
   if (!newUser)
     throw new APIError(500, {

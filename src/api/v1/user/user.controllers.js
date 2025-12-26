@@ -9,9 +9,8 @@ import { USER_ROLES } from '../../../utils/constants.js';
 export const getAllUsers = asyncHandler(async (_, res) => {
   // fetch all users from the database
   const existingUsers = await User.find({})
-    .select('_id email username role currentGroup enrolledCohorts userExpertise socialLinks')
+    .select('_id email username role currentGroup userExpertise socialLinks')
     .populate('currentGroup', 'groupName')
-    .populate('enrolledCohorts', 'cohortName')
     .lean();
 
   // send success status to user
@@ -27,9 +26,8 @@ export const getAllUsers = asyncHandler(async (_, res) => {
 export const getUser = asyncHandler(async (req, res) => {
   // fetch user from db
   const existingUser = await User.findById(req.user.id)
-    .select('_id email username role currentGroup enrolledCohorts userExpertise socialLinks')
+    .select('_id email username role currentGroup userExpertise socialLinks')
     .populate('currentGroup', 'groupName')
-    .populate('enrolledCohorts', 'cohortName')
     .lean();
   if (!existingUser)
     throw new APIError(404, {
