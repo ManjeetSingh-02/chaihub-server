@@ -64,9 +64,6 @@ cohortSchema.post('save', async function (doc) {
       { $addToSet: { allowedUserEmails: systemAdmin.email } }
     );
 
-    // update system admin enrolledCohorts to include this cohort
-    await User.updateOne({ _id: systemAdmin._id }, { $addToSet: { enrolledCohorts: doc._id } });
-
     // delete the temporary property
     delete doc.$wasNew;
   }
