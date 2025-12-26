@@ -2,7 +2,7 @@
 import { asyncHandler } from '../../../utils/async-handler.js';
 import { APIResponse } from '../../response.api.js';
 import { APIError } from '../../error.api.js';
-import { User } from '../../../models/index.js';
+import { Cohort, User } from '../../../models/index.js';
 import { USER_ROLES } from '../../../utils/constants.js';
 
 // @controller GET /
@@ -33,6 +33,9 @@ export const getUser = asyncHandler(async (req, res) => {
     throw new APIError(404, {
       message: 'User not found',
     });
+
+  // fetch all user cohort's the user is enrolled and add their info to the user object
+  existingUser.enrolledCohorts = await fetchUserCohortsInfo(existingUser.email);
 
   // send success status to user
   return res.status(200).json(
@@ -115,3 +118,12 @@ export const updateUserRole = asyncHandler(async (req, res) => {
     })
   );
 });
+
+// sub-function to fetch all user cohort's info
+async function fetchUserCohortsInfo(userEmail) {
+  const userCohorts = await Cohort.find({ allowedUserEmails: userEmail });
+  return userCohorts.map(enrolledCohort => ({
+    _id: enrolledCohort._id,
+    cohortName: enrolledCohort.cohortName,
+  }));
+}
