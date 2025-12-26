@@ -1,7 +1,6 @@
 // import local modules
 import {
   createGroup,
-  getCohortDetailsandGroups,
   getGroupDetails,
   updateGroupAnnouncements,
   updateGroupRoleRequirements,
@@ -23,9 +22,6 @@ import { Router } from 'express';
 
 // create a new router
 const router = Router({ mergeParams: true });
-
-// @route GET /
-router.get('/', getCohortDetailsandGroups);
 
 // @route POST /
 router.post('/', isUserAlreadyInAGroup, validateSchema(createGroupSchema), createGroup);
