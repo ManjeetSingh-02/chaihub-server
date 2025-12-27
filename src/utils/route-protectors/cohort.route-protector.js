@@ -4,7 +4,7 @@ import { asyncHandler } from '../async-handler.js';
 import { Cohort } from '../../models/index.js';
 
 // function to check if cohort exists
-export const doesCohortExists = asyncHandler(async (req, _, next) => {
+export const doesCohortExist = asyncHandler(async (req, _, next) => {
   // get cohort from db
   const existingCohort = await Cohort.findOne({ cohortName: req.params.cohortName })
     .select('_id allowedUserEmails')

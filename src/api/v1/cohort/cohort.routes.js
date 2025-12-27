@@ -2,7 +2,7 @@
 import { USER_ROLES } from '../../../utils/constants.js';
 import {
   hasRequiredRole,
-  doesCohortExists,
+  doesCohortExist,
   isLoggedIn,
   isUserAllowedInCohort,
   validateSchema,
@@ -45,14 +45,14 @@ router.post(
 router.get('/', isLoggedIn, getAllCohorts);
 
 // @route GET /:cohortName
-router.get('/:cohortName', isLoggedIn, doesCohortExists, isUserAllowedInCohort, getCohortDetails);
+router.get('/:cohortName', isLoggedIn, doesCohortExist, isUserAllowedInCohort, getCohortDetails);
 
 // @route PATCH /:cohortName/description
 router.patch(
   '/:cohortName/description',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN]),
-  doesCohortExists,
+  doesCohortExist,
   validateSchema(updateCohortDescriptionSchema),
   updateCohortDescription
 );
@@ -62,7 +62,7 @@ router.patch(
   '/:cohortName/process-csv',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN]),
-  doesCohortExists,
+  doesCohortExist,
   uploadCSVFiles,
   validateSchema(processCSVandAddUsersToCohortSchema),
   processCSVandAddUsersToCohort
@@ -73,7 +73,7 @@ router.patch(
   '/:cohortName/add-user',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN]),
-  doesCohortExists,
+  doesCohortExist,
   validateSchema(addUserToCohortSchema),
   addUserToCohort
 );
@@ -83,13 +83,13 @@ router.patch(
   '/:cohortName/remove-user',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN]),
-  doesCohortExists,
+  doesCohortExist,
   validateSchema(removeUserFromCohortSchema),
   removeUserFromCohort
 );
 
 // @route /:cohortName/groups
-router.use('/:cohortName/groups', isLoggedIn, doesCohortExists, isUserAllowedInCohort, groupRouter);
+router.use('/:cohortName/groups', isLoggedIn, doesCohortExist, isUserAllowedInCohort, groupRouter);
 
 // export router
 export default router;

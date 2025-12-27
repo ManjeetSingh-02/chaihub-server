@@ -1,6 +1,6 @@
 // import and export all route protectors
 export { isLoggedIn } from './auth.route-protector.js';
-export { doesCohortExists, isUserAllowedInCohort } from './cohort.route-protector.js';
+export { doesCohortExist, isUserAllowedInCohort } from './cohort.route-protector.js';
 export {
   isUserAllowedInGroup,
   isUserAlreadyInAGroup,
