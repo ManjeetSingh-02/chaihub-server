@@ -23,7 +23,7 @@ import {
   removeUserFromCohortSchema,
   updateCohortDescriptionSchema,
 } from './cohort.zodschemas.js';
-import { uploadCSVFiles } from '../../../utils/process-csv.js';
+import { uploadCSVFiles } from '../../../utils/multer.js';
 import groupRouter from '../group/group.routes.js';
 
 // import external modules
