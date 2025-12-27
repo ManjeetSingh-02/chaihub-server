@@ -66,6 +66,7 @@ export const APPLICATION_STATUS = {
   PENDING: 'pending',
   APPROVED: 'approved',
   REJECTED: 'rejected',
+  WITHDRAWN: 'withdrawn',
 };
 
 // all application status array
