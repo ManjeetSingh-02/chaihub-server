@@ -10,6 +10,5 @@ export {
 export { hasRequiredRole, isSessionActive, validateSchema } from './common.route-protector.js';
 export {
   doesApplicationExistInGroup,
-  canUserWithdrawApplication,
   userAlreadyHasAPendingApplication,
 } from './application.route-protector.js';

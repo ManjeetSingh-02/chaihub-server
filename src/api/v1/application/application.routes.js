@@ -6,7 +6,6 @@ import {
   withdrawApplication,
 } from './application.controllers.js';
 import {
-  canUserWithdrawApplication,
   doesApplicationExistInGroup,
   isUserAlreadyInAGroup,
   isUserGroupAdmin,
@@ -29,12 +28,7 @@ router.patch('/accept', isUserGroupAdmin, acceptApplication);
 router.patch('/reject', isUserGroupAdmin, rejectApplication);
 
 // @route PATCH /withdraw
-router.patch(
-  '/withdraw',
-  doesApplicationExistInGroup,
-  canUserWithdrawApplication,
-  withdrawApplication
-);
+router.patch('/withdraw', doesApplicationExistInGroup, withdrawApplication);
 
 // export router
 export default router;
