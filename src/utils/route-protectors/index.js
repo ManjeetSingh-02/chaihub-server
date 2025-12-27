@@ -5,5 +5,6 @@ export {
   isUserAllowedInGroup,
   isUserAlreadyInAGroup,
   isUserGroupAdmin,
+  doesGroupExistInCohort,
 } from './group.route-protector.js';
 export { hasRequiredRole, isSessionActive, validateSchema } from './common.route-protector.js';

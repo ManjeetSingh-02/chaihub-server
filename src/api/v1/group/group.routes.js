@@ -10,6 +10,7 @@ import {
   isUserAllowedInGroup,
   validateSchema,
   isUserGroupAdmin,
+  doesGroupExistInCohort,
 } from '../../../utils/route-protectors/index.js';
 import {
   createGroupSchema,
@@ -28,11 +29,12 @@ const router = Router({ mergeParams: true });
 router.post('/', isUserAlreadyInAGroup, validateSchema(createGroupSchema), createGroup);
 
 // @route GET /:groupName
-router.get('/:groupName', isUserAllowedInGroup, getGroupDetails);
+router.get('/:groupName', doesGroupExistInCohort, isUserAllowedInGroup, getGroupDetails);
 
 // @route PATCH /:groupName/role-requirements
 router.patch(
   '/:groupName/role-requirements',
+  doesGroupExistInCohort,
   isUserAllowedInGroup,
   isUserGroupAdmin,
   validateSchema(updateGroupRoleRequirementsSchema),
@@ -42,6 +44,7 @@ router.patch(
 // @route PATCH /:groupName/announcements
 router.patch(
   '/:groupName/announcements',
+  doesGroupExistInCohort,
   isUserAllowedInGroup,
   isUserGroupAdmin,
   validateSchema(updateGroupAnnouncementsSchema),
@@ -49,7 +52,7 @@ router.patch(
 );
 
 // @route /:groupName/applications
-router.use('/:groupName/applications', applicationRouter);
+router.use('/:groupName/applications', doesGroupExistInCohort, applicationRouter);
 
 // export router
 export default router;

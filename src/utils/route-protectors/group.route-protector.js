@@ -17,20 +17,32 @@ export const isUserAlreadyInAGroup = asyncHandler(async (req, _, next) => {
   next();
 });
 
-// function to check if user is allowed in the group
-export const isUserAllowedInGroup = asyncHandler(async (req, _, next) => {
+// function to check if group exists in the cohort
+export const doesGroupExistInCohort = asyncHandler(async (req, _, next) => {
   // fetch group from db
   const existingGroup = await Group.findOne({
     groupName: req.params.groupName,
     associatedCohort: req.cohort.id,
   })
-    .select('_id createdBy')
+    .select('_id')
     .lean();
   if (!existingGroup)
     throw new APIErrorResponse(404, {
       type: 'Group Validation Error',
       message: `Group '${req.params.groupName}' not found in this cohort`,
     });
+
+  // set group id in request object
+  req.group.id = existingGroup._id;
+
+  // forward request to next middleware
+  next();
+});
+
+// function to check if user is allowed in the group
+export const isUserAllowedInGroup = asyncHandler(async (req, _, next) => {
+  // fetch group from db
+  const existingGroup = await Group.findById(req.group.id).select('_id createdBy').lean();
 
   // check if user is system_admin or cohort_admin
   const isAdmin = [USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN].includes(req.user.role);
@@ -50,11 +62,8 @@ export const isUserAllowedInGroup = asyncHandler(async (req, _, next) => {
   // determine if user has group access
   const hasGroupAccess = isAdmin || isGroupCreator;
 
-  // set group in request object with id and a flag indicating group access
-  req.group = {
-    id: existingGroup._id,
-    groupAccess: hasGroupAccess,
-  };
+  // set group access in request object
+  req.group.groupAccess = hasGroupAccess;
 
   // forward request to next middleware
   next();
