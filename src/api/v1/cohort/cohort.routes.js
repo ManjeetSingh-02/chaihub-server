@@ -52,8 +52,8 @@ router.patch(
   '/:cohortName/description',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN]),
-  doesCohortExist,
   validateSchema(updateCohortDescriptionSchema),
+  doesCohortExist,
   updateCohortDescription
 );
 
@@ -62,9 +62,9 @@ router.patch(
   '/:cohortName/process-csv',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN]),
-  doesCohortExist,
   uploadCSVFiles,
   validateSchema(processCSVandAddUsersToCohortSchema),
+  doesCohortExist,
   processCSVandAddUsersToCohort
 );
 
@@ -73,8 +73,8 @@ router.patch(
   '/:cohortName/add-user',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN]),
-  doesCohortExist,
   validateSchema(addUserToCohortSchema),
+  doesCohortExist,
   addUserToCohort
 );
 
@@ -83,8 +83,8 @@ router.patch(
   '/:cohortName/remove-user',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN]),
-  doesCohortExist,
   validateSchema(removeUserFromCohortSchema),
+  doesCohortExist,
   removeUserFromCohort
 );
 
