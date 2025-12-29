@@ -2,44 +2,49 @@
 import { asyncHandler } from '../../../utils/async-handler.js';
 import { APIErrorResponse, APISuccessResponse } from '../../response.api.js';
 import { Application, Group } from '../../../models/index.js';
+import { runInTransaction } from '../../../utils/db.js';
 
 // @controller POST /
 export const postApplication = asyncHandler(async (req, res) => {
-  // fetch group from db
-  const existingGroup = await Group.findById(req.group.id)
-    .select('createdBy maximumMembersCount groupMembersCount roleRequirements')
-    .lean();
+  // run the application creation in a transaction session
+  await runInTransaction(async mongooseSession => {
+    // fetch group from db
+    const existingGroup = await Group.findById(req.group.id)
+      .session(mongooseSession)
+      .select('createdBy maximumMembersCount groupMembersCount')
+      .lean();
 
-  // check if user is trying to apply to their own group
-  if (existingGroup.createdBy.equals(req.user.id))
-    throw new APIErrorResponse(400, {
-      type: 'Create Application Error',
-      message: 'Group creators cannot apply to their own groups',
-    });
+    // check if user is trying to apply to their own group
+    if (String(existingGroup.createdBy) !== String(req.user.id))
+      throw new APIErrorResponse(400, {
+        type: 'Create Application Error',
+        message: 'Group creators cannot apply to their own groups',
+      });
 
-  // check if group is already full
-  if (existingGroup.groupMembersCount === existingGroup.maximumMembersCount)
-    throw new APIErrorResponse(400, {
-      type: 'Create Application Error',
-      message: 'Group already has maximum number of members',
-    });
+    // check if group is already full
+    if (existingGroup.groupMembersCount === existingGroup.maximumMembersCount)
+      throw new APIErrorResponse(400, {
+        type: 'Create Application Error',
+        message: 'Group already has maximum number of members',
+      });
 
-  // create new application
-  const newApplication = await Application.create({
-    cohortID: req.cohort.id,
-    groupID: req.group.id,
-    applicantDetails: {
-      applicantID: req.user.id,
-      applicantPitch: req.body.applicantPitch,
-      applicantResources: req.body.applicantResources,
-      applicantSkills: req.body.applicantSkills,
-    },
+    // create new application (model.create returns an array when used with session)
+    await Application.create(
+      [
+        {
+          cohortID: req.cohort.id,
+          groupID: req.group.id,
+          applicantDetails: {
+            applicantID: req.user.id,
+            applicantPitch: req.body.applicantPitch,
+            applicantResources: req.body.applicantResources,
+            applicantSkills: req.body.applicantSkills,
+          },
+        },
+      ],
+      { session: mongooseSession }
+    );
   });
-  if (!newApplication)
-    throw new APIErrorResponse(500, {
-      type: 'Create Application Error',
-      message: 'Something went wrong while applying to the group',
-    });
 
   // send success status to user
   return res.status(201).json(
