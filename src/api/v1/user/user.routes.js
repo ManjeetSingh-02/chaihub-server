@@ -5,11 +5,13 @@ import {
   isLoggedIn,
   validateSchema,
 } from '../../../utils/route-protectors/index.js';
-import { createCohortAdmin, getUser, updateUserProfessionalProfiles } from './user.controllers.js';
 import {
-  createCohortAdminSchema,
-  updateUserProfessionalProfilesSchema,
-} from './user.zodschemas.js';
+  createCohortAdminUser,
+  deleteCohortAdminUser,
+  getUser,
+  updateUserProfessionalProfiles,
+} from './user.controllers.js';
+import { cohortAdminUserSchema, updateUserProfessionalProfilesSchema } from './user.zodschemas.js';
 
 // import external modules
 import { Router } from 'express';
@@ -28,13 +30,22 @@ router.patch(
   updateUserProfessionalProfiles
 );
 
-// @route PATCH /create-cohort-admin
-router.patch(
-  '/create-cohort-admin',
+// @route POST /cohort-admin
+router.post(
+  '/cohort-admin',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
-  validateSchema(createCohortAdminSchema),
-  createCohortAdmin
+  validateSchema(cohortAdminUserSchema),
+  createCohortAdminUser
+);
+
+// @route DELETE /cohort-admin
+router.delete(
+  '/cohort-admin',
+  isLoggedIn,
+  hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
+  validateSchema(cohortAdminUserSchema),
+  deleteCohortAdminUser
 );
 
 // export router
