@@ -12,30 +12,10 @@ export const updateUserRoleSchema = z.object({
   }),
 });
 
-// zod schema for update user profile
-export const updateUserProfileSchema = z.object({
+// zod schema for update user professionalProfiles
+export const updateUserProfessionalProfilesSchema = z.object({
   body: z.object({
-    newUserExpertise: z
-      .array(
-        z.object({
-          roleName: z.string().trim().nonempty({ error: 'Atleast one roleName is required' }),
-          techStack: z
-            .array(
-              z.object({
-                skillName: z
-                  .string()
-                  .trim()
-                  .nonempty({ error: 'Atleast one skillName is required' }),
-                experienceInMonths: z
-                  .number()
-                  .min(1, { error: 'experienceInMonths must be at least 1' }),
-              })
-            )
-            .nonempty({ error: 'At least one techStack is required' }),
-        })
-      )
-      .optional(),
-    newSocialLinks: z
+    newProfessionalProfiles: z
       .array(
         z.object({
           platformName: z

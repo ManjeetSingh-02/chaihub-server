@@ -8,7 +8,7 @@ import { USER_ROLES } from '../../../utils/constants.js';
 export const getUser = asyncHandler(async (req, res) => {
   // fetch user from db
   const existingUser = await User.findById(req.user.id)
-    .select('_id email username role currentGroup userExpertise socialLinks')
+    .select('_id email username role currentGroup professionalProfiles')
     .populate('currentGroup', 'groupName')
     .populate({
       path: 'enrolledCohorts',
@@ -29,20 +29,19 @@ export const getUser = asyncHandler(async (req, res) => {
   );
 });
 
-// @controller PATCH /
-export const updateUserProfile = asyncHandler(async (req, res) => {
-  // if no fields to update are present in the body, throw error
-  if (!req.body.newUserExpertise && !req.body.newSocialLinks)
+// @controller PATCH /update-professional-profiles
+export const updateUserProfessionalProfiles = asyncHandler(async (req, res) => {
+  // if no newProfessionalProfiles are present in the body, throw error
+  if (!req.body.newProfessionalProfiles)
     throw new APIErrorResponse(400, {
-      message: 'No fields are provided to update user profile',
+      message: 'Atleast one professional profile is required to update',
     });
 
-  // update user profile
+  // update user professionalProfiles
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     {
-      userExpertise: req.body.newUserExpertise,
-      socialLinks: req.body.newSocialLinks,
+      professionalProfiles: req.body.newProfessionalProfiles,
     },
     { runValidators: true, new: true }
   );
@@ -50,13 +49,13 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
   // check if user was updated
   if (!updatedUser)
     throw new APIErrorResponse(500, {
-      message: 'Failed to update profile',
+      message: 'Failed to update user professional profiles',
     });
 
   // send success status to user
   return res.status(200).json(
     new APISuccessResponse(200, {
-      message: 'Profile updated successfully',
+      message: 'ProfessionalProfiles updated successfully',
     })
   );
 });
