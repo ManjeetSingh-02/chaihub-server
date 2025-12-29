@@ -1,8 +1,8 @@
 // import external modules
 import { z } from 'zod';
 
-// zod schema for create cohort admin
-export const createCohortAdminSchema = z.object({
+// zod schema for create/delete cohort admin
+export const cohortAdminUserSchema = z.object({
   body: z.object({
     userEmail: z.email({ error: 'Valid userEmail is required' }).trim().toLowerCase(),
   }),
