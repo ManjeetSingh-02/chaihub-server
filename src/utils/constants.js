@@ -84,7 +84,7 @@ export const availableApplicationStatus = Object.values(APPLICATION_STATUS);
 // default application reviewer feedbacks
 export const DEFAULT_REVIEWER_FEEDBACK = {
   UNDER_REVIEW:
-    'Your application has been received and is currently under review by creator of this group.',
+    'Your application has been received and is currently under review. You will be notified once a decision has been made.',
   APPROVED:
     'Congratulations! Your application has been approved. You are now a member of this group.',
   DENIED:
