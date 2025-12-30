@@ -11,7 +11,7 @@ import mongoose from 'mongoose';
 // schema for applicant
 const applicantSchema = new mongoose.Schema(
   {
-    applicantID: {
+    associatedUser: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
@@ -64,7 +64,7 @@ const applicantSchema = new mongoose.Schema(
 // schema for applicationReviewer
 const applicationReviewerSchema = new mongoose.Schema(
   {
-    applicationReviewerID: {
+    associatedUser: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       default: null,
@@ -83,12 +83,12 @@ const applicationReviewerSchema = new mongoose.Schema(
 // schema for application
 const applicationSchema = new mongoose.Schema(
   {
-    cohortID: {
+    associatedCohort: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Cohort',
       required: true,
     },
-    groupID: {
+    associatedGroup: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Group',
       required: true,
