@@ -28,3 +28,17 @@ export const createApplicationSchema = z.object({
       .nonempty({ error: 'Atleast one applicantResource is required' }),
   }),
 });
+
+// zod schema for approve/deny application
+export const approveOrDenyApplicationSchema = z.object({
+  body: z
+    .object({
+      reviewerFeedback: z
+        .string()
+        .trim()
+        .min(10, { error: 'reviewerFeedback must be at least 10 characters long' })
+        .max(200, { error: 'reviewerFeedback must be at most 200 characters long' })
+        .optional(),
+    })
+    .default({}),
+});
