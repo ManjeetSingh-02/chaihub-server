@@ -31,7 +31,7 @@ export const doesApplicationExistInGroup = asyncHandler(async (req, _, next) => 
 export const userAlreadyHasUnderReviewApplication = asyncHandler(async (req, _, next) => {
   // find pending application by the user
   const pendingApplication = await Application.findOne({
-    'applicantDetails.applicantID': req.user.id,
+    'applicantDetails.associatedUser': req.user.id,
     applicationStatus: APPLICATION_STATUS.UNDER_REVIEW,
   }).lean();
   if (pendingApplication)
