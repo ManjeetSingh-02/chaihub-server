@@ -9,7 +9,7 @@ export const doesApplicationExistInGroup = asyncHandler(async (req, _, next) => 
   // find application by applicationID and groupID
   const existingApplication = await Application.findOne({
     _id: req.params.applicationID,
-    'applicantDetails.groupID': req.params.groupID,
+    associatedGroup: req.group.id,
   }).lean();
   if (!existingApplication)
     throw new APIErrorResponse(404, {
@@ -20,7 +20,6 @@ export const doesApplicationExistInGroup = asyncHandler(async (req, _, next) => 
   // set application in request object
   req.application = {
     id: existingApplication._id,
-    applicationStatus: existingApplication.applicationStatus,
   };
 
   // forward request to next middleware
