@@ -17,7 +17,7 @@ export const isLoggedIn = asyncHandler(async (req, _, next) => {
       message: 'Access Token is missing or in an invalid format',
     });
 
-  // function to decode access token
+  // decode access token
   const decodedToken = decodeAccessToken(authorizationHeaders.split(' ')[1]);
 
   // check if user exists
@@ -47,18 +47,17 @@ function decodeAccessToken(accessToken) {
   try {
     return jwt.verify(accessToken, envConfig.ACCESS_TOKEN_SECRET);
   } catch (error) {
-    // if token is expired, throw an TokenExpiredError
+    // if token is expired, throw an token expired error
     if (error.name === 'TokenExpiredError')
       throw new APIErrorResponse(401, {
-        type: 'Token Expired Error',
+        type: 'Access Token Expired Error',
         message: 'Access Token expired, generate a new one',
       });
 
-    // for any other error, throw a JWT error
+    // for any other error, throw a generic invalid token error
     throw new APIErrorResponse(401, {
-      type: 'JWT Error',
-      message: 'Access Token is invalid',
-      issues: error.message,
+      type: 'Access Token Error',
+      message: 'Invalid Access Token',
     });
   }
 }
