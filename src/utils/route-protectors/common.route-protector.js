@@ -37,7 +37,7 @@ export const validateSchema = zodSchema =>
 // function to check for an active session
 export const isSessionActive = asyncHandler(async (req, _, next) => {
   // if refresh-token cookie is present, throw an error
-  if (req.cookies[REFRESH_TOKEN_COOKIE_CONFIG.NAME])
+  if (req.signedCookies[REFRESH_TOKEN_COOKIE_CONFIG.NAME])
     throw new APIErrorResponse(403, {
       type: 'Active Session Error',
       message: 'User already logged in with an active session',
