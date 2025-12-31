@@ -130,9 +130,6 @@ export const googleLogout = asyncHandler(async (req, res) => {
     refreshToken: null,
   });
 
-  // set req.user to null
-  req.user = null;
-
   // success status to user
   // clear refreshToken cookie
   return res
