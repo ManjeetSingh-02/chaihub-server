@@ -11,7 +11,7 @@ export const doesApplicationExistInGroup = asyncHandler(async (req, _, next) => 
     _id: req.params.applicationID,
     associatedGroup: req.group.id,
   })
-    .select('_id createdAt')
+    .select('_id applicationStatus applicantDetails.associatedUser createdAt')
     .lean();
   if (!existingApplication)
     throw new APIErrorResponse(404, {
@@ -22,6 +22,8 @@ export const doesApplicationExistInGroup = asyncHandler(async (req, _, next) => 
   // set application in request object
   req.application = {
     id: existingApplication._id,
+    associatedUser: existingApplication.applicantDetails.associatedUser,
+    applicationStatus: existingApplication.applicationStatus,
     createdAt: new Date(existingApplication.createdAt).getTime(),
   };
 
@@ -29,8 +31,28 @@ export const doesApplicationExistInGroup = asyncHandler(async (req, _, next) => 
   next();
 });
 
+// function to check if application is not in under_review
+export const isApplicationNotUnderReview = asyncHandler(async (req, _, next) => {
+  // if application is not under_review, throw error
+  if (req.application.applicationStatus !== APPLICATION_STATUS.UNDER_REVIEW)
+    throw new APIErrorResponse(400, {
+      type: 'Application Status Error',
+      message: 'Application is not in under_review status',
+    });
+
+  // forward request to next middleware
+  next();
+});
+
 // function to check if user can withdraw application
 export const canUserWithdrawApplication = asyncHandler(async (req, _, next) => {
+  // check if the user is the applicant of the application
+  if (String(req.application.associatedUser) !== String(req.user.id))
+    throw new APIErrorResponse(403, {
+      type: 'Withdraw Application Error',
+      message: 'User can withdraw only their own applications',
+    });
+
   // calculate hours since application creation
   const hoursSinceCreation = (Date.now() - req.application.createdAt) / (1000 * 60 * 60);
 
