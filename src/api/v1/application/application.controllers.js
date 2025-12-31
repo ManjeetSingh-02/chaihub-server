@@ -47,6 +47,34 @@ export const postApplication = asyncHandler(async (req, res) => {
   );
 });
 
+// @controller GET /
+export const getAllGroupApplications = asyncHandler(async (req, res) => {
+  // fetch all applications for the group
+  const allGroupApplications = await Application.find({ associatedGroup: req.group.id })
+    .select('_id applicationStatus applicantDetails applicationReviewerDetails createdAt updatedAt')
+    .populate([
+      {
+        path: 'applicantDetails.associatedUser',
+        select: '_id username',
+      },
+      {
+        path: 'applicationReviewerDetails.associatedUser',
+        select: '_id username',
+      },
+    ])
+    .lean();
+
+  // send success response to user
+  return res.status(200).json(
+    new APISuccessResponse(200, {
+      message: 'Fetched all group applications successfully',
+      data: {
+        groupApplications: allGroupApplications,
+      },
+    })
+  );
+});
+
 // @controller PATCH /:applicationID/approve
 export const approveApplication = asyncHandler(async (req, res) => {});
 

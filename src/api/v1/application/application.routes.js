@@ -4,6 +4,7 @@ import {
   postApplication,
   denyApplication,
   withdrawApplication,
+  getAllGroupApplications,
 } from './application.controllers.js';
 import {
   doesApplicationExistInGroup,
@@ -31,6 +32,9 @@ router.post(
   validateSchema(createApplicationSchema),
   postApplication
 );
+
+// @route GET /
+router.get('/', isUserGroupAdmin, getAllGroupApplications);
 
 // @route PATCH /:applicationID/approve
 router.patch(
