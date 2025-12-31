@@ -94,3 +94,6 @@ export const DEFAULT_REVIEWER_FEEDBACK = {
     'Thank you for your interest. Unfortunately, the group creator has decided not to move forward with your application at this time.',
   WITHDRAWN: 'This application was withdrawn by the applicant before a decision was made.',
 };
+
+// default withdrawal time limit in hours
+export const APPLICATION_WITHDRAWAL_TIME_LIMIT_IN_HOURS = 24;
