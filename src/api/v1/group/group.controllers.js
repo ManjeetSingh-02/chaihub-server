@@ -88,7 +88,7 @@ export const updateGroupRoleRequirements = asyncHandler(async (req, res) => {
   const updatedGroup = await Group.findByIdAndUpdate(
     req.group.id,
     {
-      roleRequirements: req.body.newRoleRequirements,
+      $set: { roleRequirements: req.body.roleRequirements },
     },
     { runValidators: true, new: true }
   );
@@ -112,7 +112,7 @@ export const updateGroupAnnouncement = asyncHandler(async (req, res) => {
   const updatedGroup = await Group.findByIdAndUpdate(
     req.group.id,
     {
-      groupAnnouncement: req.body.newAnnouncement,
+      $set: { groupAnnouncement: req.body.groupAnnouncement },
     },
     { runValidators: true, new: true }
   );
@@ -147,7 +147,7 @@ export const leaveGroup = asyncHandler(async (req, res) => {
         _id: req.user.id,
         currentGroup: req.group.id,
       },
-      { currentGroup: null },
+      { $set: { currentGroup: null } },
       { session: mongooseSession, new: true }
     );
     if (!updatedUser)
@@ -190,7 +190,7 @@ export const removeGroupMember = asyncHandler(async (req, res) => {
         email: req.body.memberEmail,
         currentGroup: req.group.id,
       },
-      { currentGroup: null },
+      { $set: { currentGroup: null } },
       { session: mongooseSession, new: true }
     );
     if (!updatedUser)
@@ -237,7 +237,7 @@ export const deleteGroup = asyncHandler(async (req, res) => {
     // update all group member's current group to null
     await User.updateMany(
       { currentGroup: req.group.id },
-      { currentGroup: null },
+      { $set: { currentGroup: null } },
       { session: mongooseSession }
     );
 

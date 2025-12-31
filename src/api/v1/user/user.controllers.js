@@ -60,7 +60,7 @@ export const updateUserProfessionalProfiles = asyncHandler(async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     {
-      professionalProfiles: req.body.newProfessionalProfiles,
+      $set: { professionalProfiles: req.body.newProfessionalProfiles },
     },
     { runValidators: true, new: true }
   );

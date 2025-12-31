@@ -89,9 +89,7 @@ export const processCSVandAddUsersToCohort = asyncHandler(async (req, res) => {
   const existingCohort = await Cohort.findById(req.cohort.id).select('allowedUserEmails');
 
   // parse all uploaded CSV files
-  const allParsedFileResults = await Promise.all(
-    req.files.map(file => parseCSVFile(file.buffer))
-  );
+  const allParsedFileResults = await Promise.all(req.files.map(file => parseCSVFile(file.buffer)));
 
   // create a email set to track duplicates
   const emailSet = new Set(existingCohort.allowedUserEmails);
@@ -168,7 +166,8 @@ export const updateCohortDescription = asyncHandler(async (req, res) => {
   // update cohort description in db
   const updatedCohort = await Cohort.updateOne(
     { _id: req.cohort.id },
-    { cohortDescription: req.body.cohortDescription }
+    { $set: { cohortDescription: req.body.cohortDescription } },
+    { runValidators: true }
   );
 
   // check if cohort was updated
