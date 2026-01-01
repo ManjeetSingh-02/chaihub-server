@@ -1,55 +1,57 @@
+// import local modules
+import app from '../../app.js';
+
 // import external modules
-import swaggerJsdoc from 'swagger-jsdoc';
+import expressJSDocSwagger from 'express-jsdoc-swagger';
 import fs from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
 (async function () {
-  const rootDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '../../../');
-  const apiFilesPatterns = ['src/api/v1/**/*.controllers.js'];
-  const outputFile = path.join(rootDir, 'docs/apiDocs.json');
+  const rootDir = path.resolve(import.meta.dirname, '../../../');
+  const outputFileDir = path.join(rootDir, 'docs', 'apiDocs.json');
 
-  try {
-    // generate API documentation in OpenAPI 3.0 format using swagger-jsdoc
-    const generatedAPIDocs = swaggerJsdoc({
-      definition: {
-        openapi: '3.0.0',
-        info: {
-          title: 'ChaiHub-Server API Documentation',
-          description: 'Interactive API reference for ChaiHub-Server',
-          version: '1.0.0',
-          contact: {
-            name: 'Manjeet Singh',
-            url: 'https://github.com/ManjeetSingh-02',
-            email: 'manjeetsingh.wrk@gmail.com',
-          },
-        },
-        servers: [
-          {
-            url: 'http://localhost:3000',
-            description: 'Development Server',
-          },
-        ],
+  // initialize swagger documentation
+  const docInstance = expressJSDocSwagger(app)({
+    baseDir: path.join(rootDir, 'src'),
+    filesPattern: 'api/v1/**/*.controllers.js',
+    info: {
+      contact: {
+        name: 'Manjeet Singh',
+        email: 'manjeetsingh.wrk@gmail.com',
+        url: 'https://github.com/ManjeetSingh-02',
       },
-      apis: apiFilesPatterns,
-    });
+      description: 'Interactive API reference for ChaiHub-Server',
+      title: 'ChaiHub-Server API Documentation',
+      version: '1.0.0',
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+        description: 'Development server',
+      },
+    ],
+  });
 
-    // save the generated documentation to a JSON file in the output directory
-    await fs.writeFile(outputFile, JSON.stringify(generatedAPIDocs, null, 2), 'utf8');
-    console.log('--- API Documentation JSON Stored in Output File: ✅');
-  } catch (error) {
-    // log error
-    console.error('---------------------------------------------------------');
-    console.error('ERROR DURING API DOCS JSON GENERATION');
-    console.error(`ERROR DETAILS: ${error.message}`);
-    console.error('RUN THE SCRIPT AGAIN AFTER FIXING THE ISSUE');
-    console.error('---------------------------------------------------------');
+  // listen for 'finish' event to save the generated docs into a json file
+  docInstance.on('finish', async generatedData => {
+    try {
+      // save the generated documentation to a JSON file in the output directory
+      await fs.writeFile(outputFileDir, JSON.stringify(generatedData, null, 2), 'utf8');
+      console.log('--- API Documentation JSON Stored in Output File: ✅');
+    } catch (error) {
+      // log error
+      console.error('---------------------------------------------------------');
+      console.error('ERROR DURING API DOCS JSON GENERATION');
+      console.error(`ERROR DETAILS: ${error.message}`);
+      console.error('RUN THE SCRIPT AGAIN AFTER FIXING THE ISSUE');
+      console.error('---------------------------------------------------------');
 
-    // delete the output file if it was partially created
-    await fs.unlink(outputFile).catch(() => {});
-    console.log('--- Partially Created Output File Deletion: ✅');
+      // delete the output file if it was partially created
+      await fs.unlink(outputFileDir).catch(() => {});
+      console.log('--- Partially Created Output File Deletion: ✅');
 
-    // exit with failure
-    process.exit(1);
-  }
+      // exit with failure
+      process.exit(1);
+    }
+  });
 })();
