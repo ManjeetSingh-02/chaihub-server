@@ -14,7 +14,7 @@ import path from 'path';
   // initialize swagger documentation
   const docInstance = expressJSDocSwagger(app)({
     baseDir: srcDir,
-    filesPattern: 'api/v1/**/*.controllers.js',
+    filesPattern: ['api/response.api.js', 'api/v1/**/*.controllers.js'],
     info: {
       contact: {
         name: 'Manjeet Singh',
@@ -24,6 +24,14 @@ import path from 'path';
       description: 'Interactive API reference for ChaiHub-Server',
       title: 'ChaiHub-Server API Documentation',
       version: '1.0.0',
+    },
+    security: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Enter your JWT token in the format: Bearer <token>',
+      },
     },
     servers: [
       {
