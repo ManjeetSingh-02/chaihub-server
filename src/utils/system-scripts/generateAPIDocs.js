@@ -10,11 +10,13 @@ import path from 'path';
   const srcDir = path.resolve(import.meta.dirname, '../../');
   const outputDir = path.join(srcDir, 'utils', 'docs');
   const outputFile = path.join(outputDir, 'apiDocs.json');
+  const allFilePatterns = ['api', 'api/v1/**'];
+  const filePatternPaths = allFilePatterns.map(dir => dir + '/*.docs.js');
 
   // initialize swagger documentation
   const docInstance = expressJSDocSwagger(app)({
     baseDir: srcDir,
-    filesPattern: ['api/docs.typedefs.js', 'api/v1/**/*.docs.js'],
+    filesPattern: filePatternPaths,
     info: {
       contact: {
         name: 'Manjeet Singh',
@@ -24,14 +26,6 @@ import path from 'path';
       description: 'Interactive API reference for ChaiHub-Server',
       title: 'ChaiHub-Server API Documentation',
       version: '1.0.0',
-    },
-    security: {
-      bearerAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        description: 'Enter your JWT token in the format: Bearer <token>',
-      },
     },
     servers: [
       {
