@@ -32,39 +32,101 @@
       }
     },
     "schemas": {
+      "SuccessData": {
+        "description": "Standard structure for success details in API responses.",
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "description": "Descriptive success message",
+            "type": "string"
+          },
+          "data": {
+            "description": "Actual data returned from the API",
+            "oneOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            ]
+          }
+        }
+      },
       "APISuccessResponse": {
-        "description": "",
+        "description": "Standard structure for success API responses.",
+        "required": [
+          "success",
+          "statusCode",
+          "response"
+        ],
         "type": "object",
         "properties": {
           "success": {
-            "description": "Indicates the request was successful",
+            "description": "Always true for success responses",
             "type": "boolean"
           },
           "statusCode": {
-            "description": "The HTTP status code",
+            "description": "HTTP status code",
             "type": "number"
           },
           "response": {
-            "description": "Success message (Always present)",
+            "description": "Container for success response details",
+            "$ref": "#/components/schemas/SuccessData"
+          }
+        }
+      },
+      "ErrorData": {
+        "description": "Standard structure for error details in API responses.",
+        "required": [
+          "type",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Category of error",
             "type": "string"
+          },
+          "message": {
+            "description": "Descriptive error message",
+            "type": "string"
+          },
+          "issues": {
+            "description": "List of specific issues encountered",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
       "APIErrorResponse": {
-        "description": "",
+        "description": "Standard structure for all error API responses.",
+        "required": [
+          "success",
+          "statusCode",
+          "error"
+        ],
         "type": "object",
         "properties": {
           "success": {
-            "description": "Indicates the request failed",
+            "description": "Always false for error responses",
             "type": "boolean"
           },
           "statusCode": {
-            "description": "The HTTP status code",
+            "description": "HTTP status code",
             "type": "number"
           },
           "error": {
-            "description": "Description of the error",
-            "type": "string"
+            "description": "Container for error response details",
+            "$ref": "#/components/schemas/ErrorData"
           }
         }
       }
