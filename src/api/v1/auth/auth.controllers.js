@@ -6,7 +6,7 @@ import {
   REFRESH_TOKEN_COOKIE_CONFIG,
 } from '../../../utils/constants.js';
 import { asyncHandler } from '../../../utils/async-handler.js';
-import { APIErrorResponse, APISuccessResponse } from '../../response.api.js';
+import { APIErrorResponse, APISuccessResponse } from '../response/response.api.js';
 import { Cohort, User } from '../../../models/index.js';
 
 // import external modules

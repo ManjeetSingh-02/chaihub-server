@@ -1,5 +1,5 @@
 // import local modules
-import { APIErrorResponse } from '../../api/response.api.js';
+import { APIErrorResponse } from '../../api/v1/response/response.api.js';
 import { asyncHandler } from '../async-handler.js';
 import { Application } from '../../models/index.js';
 import { APPLICATION_STATUS, APPLICATION_WITHDRAWAL_TIME_LIMIT_IN_HOURS } from '../constants.js';

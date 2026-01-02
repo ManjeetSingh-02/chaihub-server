@@ -1,5 +1,5 @@
 // import local modules
-import { APIErrorResponse } from '../../api/response.api.js';
+import { APIErrorResponse } from '../../api/v1/response/response.api.js';
 import { asyncHandler } from '../async-handler.js';
 import { Cohort } from '../../models/index.js';
 import { USER_ROLES } from '../constants.js';
