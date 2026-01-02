@@ -61,6 +61,9 @@ import path from 'path';
       // save the generated documentation to a JSON file in the output directory
       await fs.writeFile(outputFile, JSON.stringify(generatedData, null, 2), 'utf8');
       console.log('--- API Documentation JSON Stored in Output File: ✅');
+
+      // exit with success
+      process.exit(0);
     } catch (error) {
       // log error
       console.error('---------------------------------------------------------');

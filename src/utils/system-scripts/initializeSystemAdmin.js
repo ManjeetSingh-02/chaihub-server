@@ -47,6 +47,9 @@ async function getSystemAdminUserEmailFromCLI() {
     // disconnect from database
     await mongoose.disconnect();
     console.log('--- Database Disconnected: ✅');
+
+    // exit with success
+    process.exit(0);
   } catch (error) {
     // log error
     console.error('---------------------------------------------------------');
